@@ -1,0 +1,8 @@
+{
+  // Copia questo file come "updater.config.json" accanto all'exe dell'updater.
+  // Senza questo file viene usato l'URL di default compilato nel codice.
+  // "language" (facoltativo): "en", "it", ... — vuoto o omesso = lingua di
+  // Windows. Le lingue vivono nella cartella Languages\ accanto all'exe.
+  "manifest_url": "https://files.example.com/index.php/raw/MioShare/manifest.json",
+  "language": ""
+}

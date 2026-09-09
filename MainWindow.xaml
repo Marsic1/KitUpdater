@@ -1,0 +1,342 @@
+﻿<Window x:Class="Marsic1UtilityUpdater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:Marsic1UtilityUpdater.Shared"
+        Title="KitUpdater" Height="700" Width="800"
+        WindowStartupLocation="CenterScreen" Background="#1E1E1E" Foreground="#E0E0E0"
+        FontFamily="Segoe UI" Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <!-- Stile Base Pulsanti -->
+        <Style x:Key="BaseButton" TargetType="Button">
+            <Setter Property="Background" Value="#2D2D30"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#3F3F46"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3E3E42"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#1E1E1E"/>
+                    <Setter Property="Foreground" Value="#666666"/>
+                    <Setter Property="BorderBrush" Value="#2D2D30"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+            <Setter Property="Background" Value="#005A9E"/>
+            <Setter Property="BorderBrush" Value="#004A82"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#0078D7"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#252526"/>
+                    <Setter Property="Foreground" Value="#666666"/>
+                    <Setter Property="BorderBrush" Value="#333337"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource BaseButton}"/>
+
+        <!-- Scrollbar e Thumb -->
+        <Style x:Key="DarkScrollBarThumb" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border x:Name="ThumbBorder" Background="#555555" CornerRadius="3" Margin="3,0,3,0"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ThumbBorder" Property="Background" Value="#777777"/>
+                            </Trigger>
+                            <Trigger Property="IsDragging" Value="True">
+                                <Setter TargetName="ThumbBorder" Property="Background" Value="#999999"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="Background" Value="#1E1E1E"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Track x:Name="PART_Track" IsDirectionReversed="true">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="False"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="False"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource DarkScrollBarThumb}"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Stile Intestazioni Tabelle (comune per tutte le liste) -->
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="#333337"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="BorderBrush" Value="#252526"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GridViewColumnHeader">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3E3E42"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#2D2D30"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Stile Righe Tabella (comune) -->
+        <Style x:Key="DarkListViewItem" TargetType="ListViewItem">
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="2,1"/>
+            <Setter Property="Padding" Value="2,4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="ItemBorder" Background="{TemplateBinding Background}" BorderThickness="0" CornerRadius="3" Padding="{TemplateBinding Padding}">
+                            <GridViewRowPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#333337"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#444444"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="120"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header con Testo a sinistra e Logo a destra -->
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock x:Name="HeaderTitle" Text="KitUpdater" FontSize="24" FontWeight="Bold" Foreground="#F0F0F0" Margin="0,0,0,2"/>
+                <TextBlock Text="{l:Loc 'Gestione Aggiornamenti ed Extra'}" FontSize="14" Foreground="#888888"/>
+            </StackPanel>
+
+            <!-- Logo in alto a destra (logo.custom.png del builder se incorporato, altrimenti il default) -->
+            <Image x:Name="HeaderLogo" Source="logo.png" Width="150" Height="150" HorizontalAlignment="Right" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
+        </Grid>
+
+        <!-- IL NUOVO TAB CONTROL -->
+        <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0" Margin="0,0,0,15">
+            <TabControl.Resources>
+                <!-- Stile scuro per le linguette (Tabs) in alto -->
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border Name="Border" Background="#252526" BorderBrush="#3F3F46" BorderThickness="1" CornerRadius="4,4,0,0" Margin="0,0,2,0" Padding="15,8">
+                                    <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="#005A9E"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#004A82"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Foreground" Value="#AAAAAA"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="#3E3E42"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Style>
+            </TabControl.Resources>
+
+            <!-- SCHEDA 1: I TUOI VECCHI COMPONENTI -->
+            <TabItem Header="{l:Loc 'Componenti del Kit'}">
+                <Border Background="#252526" BorderBrush="#3F3F46" BorderThickness="1" CornerRadius="0,4,4,4" Margin="0">
+                    <ListView x:Name="ComponentsList" Background="Transparent" BorderThickness="0" Foreground="White" SelectionChanged="ComponentsList_SelectionChanged">
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem" BasedOn="{StaticResource DarkListViewItem}">
+                                <Setter Property="ToolTipService.ToolTip">
+                                    <Setter.Value>
+                                        <ToolTip Background="#1E1E1E" BorderBrush="#3F3F46" BorderThickness="1" Foreground="#CCCCCC" Placement="Mouse">
+                                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" MaxWidth="300" Padding="5"/>
+                                        </ToolTip>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Description}" Value="{x:Null}">
+                                        <Setter Property="ToolTipService.IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Description}" Value="">
+                                        <Setter Property="ToolTipService.IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="{l:Loc 'Componente'}" DisplayMemberBinding="{Binding Name}" Width="250"/>
+                                <GridViewColumn Header="{l:Loc 'V. Attuale'}" DisplayMemberBinding="{Binding LocalVersion}" Width="100"/>
+                                <GridViewColumn Header="{l:Loc 'V. Remota'}" DisplayMemberBinding="{Binding RemoteVersion}" Width="100"/>
+                                <GridViewColumn Header="{l:Loc 'Stato'}" Width="160">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Status}" FontWeight="SemiBold">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="#E0E0E0"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{l:Loc 'Aggiornato'}">
+                                                                <Setter Property="Foreground" Value="#4CAF50"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{l:Loc 'Da Aggiornare'}">
+                                                                <Setter Property="Foreground" Value="#FF9800"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{l:Loc 'Nuovo Componente'}">
+                                                                <Setter Property="Foreground" Value="#03A9F4"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{l:Loc 'Download...'}">
+                                                                <Setter Property="Foreground" Value="#00BCD4"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{l:Loc 'Estrazione...'}">
+                                                                <Setter Property="Foreground" Value="#E040FB"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{l:Loc 'Errore'}">
+                                                                <Setter Property="Foreground" Value="#F44336"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Border>
+            </TabItem>
+
+            <!-- SCHEDA 2: LA NUOVA LISTA DEGLI EXTRA -->
+            <TabItem Header="{l:Loc 'Utility &amp; Extra'}">
+                <Border Background="#252526" BorderBrush="#3F3F46" BorderThickness="1" CornerRadius="0,4,4,4" Margin="0">
+                    <ListView x:Name="ExtrasList" Background="Transparent" BorderThickness="0" Foreground="White" ItemContainerStyle="{StaticResource DarkListViewItem}">
+                        <ListView.View>
+                            <GridView>
+                                <!-- Colonna 1: Nome e Descrizione -->
+                                <GridViewColumn Header="{l:Loc 'Strumento'}" Width="320">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,5,0,5">
+                                                <TextBlock FontSize="12" FontWeight="Bold" Foreground="#E0E0E0" Text="{Binding Name}"/>
+                                                <TextBlock Foreground="#888888" Margin="0,3,0,0" MaxWidth="300" Text="{Binding Description}" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <!-- Colonna 2: Pulsanti interattivi -->
+                                <GridViewColumn Header="{l:Loc 'Azioni'}" Width="240">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="{Binding ActionButtonText}" Click="BtnExtraAction_Click" Height="28" Margin="0,0,10,0" Visibility="{Binding ActionButtonVisibility}"/>
+                                                <Button Content="{l:Loc 'Apri Guida'}" Click="BtnOpenGuide_Click" Height="28" Background="#3E3E42" BorderBrush="#555555" Visibility="{Binding GuideButtonVisibility}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <!-- Colonna 3: Stato Extra -->
+                                <GridViewColumn Header="{l:Loc 'Stato'}" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Status}" FontWeight="SemiBold" Foreground="#00BCD4" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+        <!-- Controlli e Progresso -->
+        <Grid Grid.Row="2" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <ProgressBar x:Name="MainProgress" Grid.Column="0" Height="8" Margin="0,0,15,0" Foreground="#444444" Background="#2D2D30" BorderThickness="0"/>
+
+            <Button x:Name="BtnCheck" Content="{l:Loc 'Controlla'}" Grid.Column="1" Width="90" Height="32" Margin="0,0,10,0" Click="BtnCheck_Click"/>
+            <Button x:Name="BtnUpdateSelected" Content="{l:Loc 'Aggiorna Selezionato'}" Grid.Column="2" Width="140" Height="32" Margin="0,0,10,0" Click="BtnUpdateSelected_Click" IsEnabled="False"/>
+            <Button x:Name="BtnUpdate" Content="{l:Loc 'Aggiorna Tutto'}" Style="{StaticResource PrimaryButton}" Grid.Column="3" Width="110" Height="32" Click="BtnUpdateAll_Click" IsEnabled="False"/>
+        </Grid>
+
+        <!-- Log della Console -->
+        <Border Grid.Row="3" BorderBrush="#3F3F46" BorderThickness="1" CornerRadius="4">
+            <TextBox x:Name="TxtLog" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" FontFamily="Consolas" Background="#0D0D0D" Foreground="#CCCCCC" BorderThickness="0" Padding="8"/>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,34 @@
+# Cartelle di build
+bin/
+obj/
+.vs/
+.zcode/
+
+# Logo personale del maintainer (il default pubblico è logo.png;
+# la copia personale del gatto vive in logo.custom.png, ignorato)
+cat.png
+
+# Pacchetti NuGet (ripristinabili con nuget restore)
+packages/
+
+# File personali: non pubblicare nel repo pubblico
+updater.config.json
+manifest.json
+manifesteditor.config.json
+
+# Branding del builder (sovrascritture in fase di build, non tracciate):
+# chi compila la versione pubblica mette qui i suoi file senza fork e senza
+# conflitti con git pull
+Directory.Build.props
+icon.custom.ico
+logo.custom.png
+
+# Personalizzazioni locali: icona e lingue proprie accanto all'exe
+app.ico
+bin/**/app.ico
+bin/**/Languages/
+
+# Varie
+*.user
+*.suo
+Thumbs.db

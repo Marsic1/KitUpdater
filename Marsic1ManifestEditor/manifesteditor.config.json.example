@@ -1,0 +1,12 @@
+{
+  // Copia questo file come "manifesteditor.config.json" accanto all'exe del ManifestEditor.
+  // "language" (facoltativo): "en", "it", ... — vuoto o omesso = lingua di Windows.
+  // "encrypted_password" viene scritto dal programma (cifrato con DPAPI) e
+  // non va mai compilato a mano né pubblicato.
+  "server_url": "https://cloud.example.com",
+  "username": "nome.utente",
+  "remote_path": "/MioKit/manifest.json",
+  "public_manifest_url": "https://cloud.example.com/index.php/raw/MioShare/manifest.json",
+  "language": "",
+  "encrypted_password": ""
+}
