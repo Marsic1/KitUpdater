@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\Costura.Fody.6.2.0\build\Costura.Fody.props" Condition="Exists('packages\Costura.Fody.6.2.0\build\Costura.Fody.props')" />
+  <Import Project="..\packages\Costura.Fody.6.2.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.6.2.0\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{108D6900-BDC7-4C32-81FB-CEA0BB41ED5B}</ProjectGuid>
+    <ProjectGuid>{7A5C2E10-9F4B-4C8D-A1E6-2C7B8D9F0A11}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Marsic1UtilityUpdater</RootNamespace>
+    <RootNamespace>KitUpdaterEditor</RootNamespace>
     <!-- Personalizzabile da Directory.Build.props (file non tracciato da git):
          il default vale solo se il builder non ne ha definito uno -->
-    <AssemblyName Condition="'$(AssemblyName)' == ''">KitUpdater</AssemblyName>
+    <AssemblyName Condition="'$(AssemblyName)' == ''">KitUpdaterEditor</AssemblyName>
     <!-- Nome del brand mostrato nel titolo della finestra (Directory.Build.props) -->
     <BrandName Condition="'$(BrandName)' == ''">KitUpdater</BrandName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -21,6 +21,16 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <!-- Icona di default (stessa dell'updater); la sostituisce icon.custom.ico
+       del builder quando presente nella radice del repository. -->
+  <PropertyGroup>
+    <ApplicationIcon>..\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <!-- Branding del builder: icona personalizzata compilata dentro l'exe.
+       Il file non è tracciato da git, quindi git pull resta sempre pulito. -->
+  <PropertyGroup Condition="Exists('..\icon.custom.ico')">
+    <ApplicationIcon>..\icon.custom.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,32 +44,25 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <!-- niente PDB in Release: evita di incorporare nei binari il percorso
+         locale (utente/cartella) del file .pdb -->
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <!-- Branding del builder: icona personalizzata compilata dentro l'exe.
-       Il file non è tracciato da git, quindi git pull resta sempre pulito. -->
-  <PropertyGroup Condition="Exists('icon.custom.ico')">
-    <ApplicationIcon>icon.custom.ico</ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=6.2.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
-      <HintPath>packages\Costura.Fody.6.2.0\lib\netstandard2.0\Costura.dll</HintPath>
+      <HintPath>..\packages\Costura.Fody.6.2.0\lib\netstandard2.0\Costura.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -78,66 +81,43 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Shared\ManifestModels.cs" />
-    <Compile Include="Shared\Localization.cs" />
-    <!-- Classe Branding generata a ogni build dalla proprietà BrandName:
-         vedi il target GenerateBranding più in basso -->
-    <Compile Include="$(BaseIntermediateOutputPath)Branding.g.cs" />
-    <Compile Include="UpdateDialog.xaml.cs">
-      <DependentUpon>UpdateDialog.xaml</DependentUpon>
+    <Compile Include="WebDavClient.cs" />
+    <Compile Include="EditorConfig.cs" />
+    <Compile Include="ManifestValidator.cs" />
+    <Page Include="SettingsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="SettingsDialog.xaml.cs">
+      <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UpdateDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <!-- Modelli e localizzazione condivisi con l'updater -->
+    <Compile Include="..\Shared\ManifestModels.cs">
+      <Link>Shared\ManifestModels.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\Localization.cs">
+      <Link>Shared\Localization.cs</Link>
+    </Compile>
+    <!-- Classe Branding generata a ogni build dalla proprietà BrandName:
+         vedi il target GenerateBranding più in basso -->
+    <Compile Include="$(BaseIntermediateOutputPath)Branding.g.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="logo.png" />
-    <Resource Include="icon.ico" />
-  </ItemGroup>
-  <!-- Logo del builder: se logo.custom.png esiste viene incorporato come
-       risorsa e usato dalla finestra principale al posto di cat.png. -->
-  <ItemGroup Condition="Exists('logo.custom.png')">
-    <Resource Include="logo.custom.png" />
   </ItemGroup>
   <ItemGroup>
     <!-- Pacchetti lingua: copiati accanto all'exe, aggiungibili senza ricompilare -->
@@ -145,12 +125,16 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Branding del builder: Branding.g.cs espone Branding.Name (titolo della
        finestra e proprietà del prodotto). Il nome viene da BrandName, che il
        builder imposta in Directory.Build.props (file non tracciato da git). -->
   <ItemGroup>
-    <BrandingLines Include="namespace Marsic1UtilityUpdater.Shared" />
+    <BrandingLines Include="namespace KitUpdater.Shared" />
     <BrandingLines Include="{" />
     <BrandingLines Include="    // File generato automaticamente a ogni build: non modificare." />
     <BrandingLines Include="    public static class Branding" />
@@ -162,14 +146,14 @@
   <Target Name="GenerateBranding" BeforeTargets="BeforeBuild">
     <WriteLinesToFile File="$(BaseIntermediateOutputPath)Branding.g.cs" Lines="@(BrandingLines)" Overwrite="true" />
   </Target>
-  <Import Project="packages\Fody.6.9.3\build\Fody.targets" Condition="Exists('packages\Fody.6.9.3\build\Fody.targets')" />
+  <Import Project="..\packages\Fody.6.9.3\build\Fody.targets" Condition="Exists('..\packages\Fody.6.9.3\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Questo progetto fa riferimento a uno o più pacchetti NuGet che non sono presenti in questo computer. Usare lo strumento di ripristino dei pacchetti NuGet per scaricarli. Per altre informazioni, vedere http://go.microsoft.com/fwlink/?LinkID=322105. Il file mancante è {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Fody.6.9.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Fody.6.9.3\build\Fody.targets'))" />
-    <Error Condition="!Exists('packages\Costura.Fody.6.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.6.2.0\build\Costura.Fody.props'))" />
-    <Error Condition="!Exists('packages\Costura.Fody.6.2.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.6.2.0\build\Costura.Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.6.9.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.9.3\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.6.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.6.2.0\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.6.2.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.6.2.0\build\Costura.Fody.targets'))" />
   </Target>
-  <Import Project="packages\Costura.Fody.6.2.0\build\Costura.Fody.targets" Condition="Exists('packages\Costura.Fody.6.2.0\build\Costura.Fody.targets')" />
+  <Import Project="..\packages\Costura.Fody.6.2.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.6.2.0\build\Costura.Fody.targets')" />
 </Project>

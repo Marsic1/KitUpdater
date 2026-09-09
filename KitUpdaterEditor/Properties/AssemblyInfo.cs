@@ -1,11 +1,11 @@
-using Marsic1UtilityUpdater.Shared;
+using KitUpdater.Shared;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
 [assembly: AssemblyTitle(Branding.Name + " Editor")]
-[assembly: AssemblyDescription("Editor del manifest per Marsic1 Utility Updater")]
+[assembly: AssemblyDescription(Branding.Name + " manifest editor")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct(Branding.Name + " Editor")]

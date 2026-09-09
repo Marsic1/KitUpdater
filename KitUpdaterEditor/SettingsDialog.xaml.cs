@@ -1,10 +1,10 @@
-using Marsic1UtilityUpdater.Shared;
+using KitUpdater.Shared;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace Marsic1ManifestEditor
+namespace KitUpdaterEditor
 {
     public partial class SettingsDialog : Window
     {

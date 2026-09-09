@@ -1,10 +1,10 @@
-using Marsic1UtilityUpdater.Shared;
+using KitUpdater.Shared;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Windows;
 
-namespace Marsic1UtilityUpdater
+namespace KitUpdater
 {
     /// <summary>
     /// Logica di interazione per App.xaml

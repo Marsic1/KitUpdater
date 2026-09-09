@@ -13,9 +13,9 @@
     <BrandName>KitUpdater</BrandName>
 
     <!-- Nome dell'exe dell'updater (default: KitUpdater) -->
-    <AssemblyName Condition="'$(MSBuildProjectName)' == 'Marsic1UtilityUpdater'">KitUpdater</AssemblyName>
+    <AssemblyName Condition="'$(MSBuildProjectName)' == 'KitUpdater'">KitUpdater</AssemblyName>
 
     <!-- Nome dell'exe del ManifestEditor (default: KitUpdaterEditor) -->
-    <AssemblyName Condition="'$(MSBuildProjectName)' == 'Marsic1ManifestEditor'">KitUpdaterEditor</AssemblyName>
+    <AssemblyName Condition="'$(MSBuildProjectName)' == 'KitUpdaterEditor'">KitUpdaterEditor</AssemblyName>
   </PropertyGroup>
 </Project>

@@ -1,4 +1,4 @@
-using Marsic1UtilityUpdater.Shared;
+using KitUpdater.Shared;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 
-namespace Marsic1ManifestEditor
+namespace KitUpdaterEditor
 {
     public partial class MainWindow : Window
     {

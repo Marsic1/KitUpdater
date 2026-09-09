@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Marsic1UtilityUpdater.Shared
+namespace KitUpdater.Shared
 {
     // Modelli del manifest condivisi tra Updater e ManifestEditor.
     // La stessa serializzazione JSON garantisce che i due programmi

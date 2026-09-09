@@ -5,7 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Marsic1ManifestEditor
+namespace KitUpdaterEditor
 {
     // Configurazione del ManifestEditor salvata accanto all'exe.
     // La password dell'app Nextcloud viene cifrata con DPAPI (CurrentUser):

@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 
-namespace Marsic1UtilityUpdater.Shared
+namespace KitUpdater.Shared
 {
     // Localizzazione runtime condivisa da Updater e ManifestEditor.
     //

@@ -1,9 +1,9 @@
-using Marsic1UtilityUpdater.Shared;
+using KitUpdater.Shared;
 using System;
 using System.IO;
 using System.Windows;
 
-namespace Marsic1ManifestEditor
+namespace KitUpdaterEditor
 {
     /// <summary>
     /// Logica di interazione per App.xaml

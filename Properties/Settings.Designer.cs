@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Marsic1UtilityUpdater.Properties
+namespace KitUpdater.Properties
 {
 
 

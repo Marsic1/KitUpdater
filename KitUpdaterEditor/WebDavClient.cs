@@ -7,7 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Marsic1ManifestEditor
+namespace KitUpdaterEditor
 {
     // Client WebDAV minimale per Nextcloud: upload (PUT) e download (GET)
     // di un file sul percorso remoto.php/dav/files/<utente>/<percorso>.

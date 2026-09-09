@@ -1,7 +1,7 @@
-﻿<Window x:Class="Marsic1UtilityUpdater.MainWindow"
+﻿<Window x:Class="KitUpdater.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:l="clr-namespace:Marsic1UtilityUpdater.Shared"
+        xmlns:l="clr-namespace:KitUpdater.Shared"
         Title="KitUpdater" Height="700" Width="800"
         WindowStartupLocation="CenterScreen" Background="#1E1E1E" Foreground="#E0E0E0"
         FontFamily="Segoe UI" Loaded="Window_Loaded">

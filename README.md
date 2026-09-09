@@ -132,7 +132,7 @@ Language selection order: the `language` field in `updater.config.json` (updater
 Visual Studio 2022+ with the .NET Framework 4.8 developer pack, or:
 
 ```
-msbuild Marsic1UtilityUpdater.slnx -p:Configuration=Release
+msbuild KitUpdater.slnx -p:Configuration=Release
 ```
 
 NuGet packages (Newtonsoft.Json, Fody, Costura.Fody) are expected under `packages\` — restore with `nuget restore` if missing. Costura embeds the dependencies, so each build output is a single portable exe.

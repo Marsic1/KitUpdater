@@ -1,9 +1,9 @@
-using Marsic1UtilityUpdater.Shared;
+using KitUpdater.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Marsic1ManifestEditor
+namespace KitUpdaterEditor
 {
     // Validazione del manifest prima del salvataggio o dell'upload:
     // restituisce l'elenco degli errori da mostrare all'utente.

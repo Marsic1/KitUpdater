@@ -1,4 +1,4 @@
-﻿using Marsic1UtilityUpdater.Shared;
+﻿using KitUpdater.Shared;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
