@@ -96,13 +96,41 @@ Notable details:
 
 ## Customization (no fork needed)
 
-Brand your own build at **build time** using untracked files — `git pull` never conflicts, there is nothing to fork:
+### Make it yours in 5 minutes
 
-| File you drop in | Effect |
+Want the updater to be *yours* — your name, your icon, your logo? No coding, no fork, no editing any project file. Your customization lives in a few files with special names, git ignores them all, so you can always grab the latest updates with `git pull` and nothing ever conflicts.
+
+**Step by step:**
+
+1. **Download or clone** this repository.
+
+2. **Drop your files into the repo folder** — the one that contains this `README.md`. All optional, use only what you want:
+
+   | Drop this file... | ...to change this |
+   |---|---|
+   | `icon.custom.ico` | The icon of both exes (a standard `.ico` file — your exe files will show this icon in Explorer and the taskbar) |
+   | `logo.custom.png` | The picture in the top-right corner of the updater window |
+   | `Directory.Build.props` | The names — copy the ready-made `Directory.Build.props.example` from the repo, rename it to `Directory.Build.props`, then edit the three values inside: `BrandName` (shown in window titles, e.g. `YourName Updater`) and the two `AssemblyName` lines (the exe file names, e.g. `YourUpdater.exe`) |
+
+3. **Build it**:
+
+   ```
+   msbuild KitUpdater.slnx -p:Configuration=Release
+   ```
+
+   Your branded exes appear in `bin\Release\` and `KitUpdaterEditor\bin\Release\`.
+
+4. **Later, when this project gets updates**: just `git pull` and build again — your custom files are never touched, your branding reappears automatically. Delete a custom file anytime to go back to the stock look.
+
+That's it. If you skip step 2 entirely you simply get the stock `KitUpdater.exe` / `KitUpdaterEditor.exe`.
+
+### Quick reference
+
+| File (repo root) | Effect |
 |---|---|
-| `icon.custom.ico` (next to the updater csproj, or repo root for the editor) | Compiled into the exe as its icon, replacing the default |
-| `logo.custom.png` (next to the updater csproj) | The logo in the top-right of the updater window |
-| `Directory.Build.props` (repo root, see `Directory.Build.props.example`) | The names of the built exes (`KitUpdater.exe` → `YourUpdater.exe`) and the brand name shown in window titles and product info (`BrandName`) |
+| `icon.custom.ico` | Compiled into both exes as their icon, replacing the default |
+| `logo.custom.png` | The logo in the top-right of the updater window |
+| `Directory.Build.props` (see `Directory.Build.props.example`) | Exe names (`KitUpdater.exe` → `YourUpdater.exe`) and the brand name shown in window titles and product info (`BrandName`) |
 
 All three are git-ignored: keep them in your working copy, pull upstream improvements, rebuild — your branding reapplies automatically.
 
