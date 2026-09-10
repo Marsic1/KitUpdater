@@ -58,18 +58,20 @@ namespace KitUpdater
         {
             InitializeComponent();
 
+            // La versione dell'updater viene letta dall'assembly invece che da una costante
+            _updaterVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+
             // Nome del brand: "KitUpdater" di default, personalizzabile in
-            // fase di build con la proprietà BrandName in Directory.Build.props
-            Title = Branding.Name;
+            // fase di build con la proprietà BrandName in Directory.Build.props.
+            // Il titolo della finestra mostra anche la versione (l'intestazione
+            // grande resta solo col nome).
+            Title = $"{Branding.Name} {_updaterVersion}";
             HeaderTitle.Text = Branding.Name;
 
             ViewModels = new ObservableCollection<ComponentViewModel>();
             _localManifestPath = Path.Combine(_baseDir, "manifest.json");
             _tempFolder = Path.Combine(_baseDir, ".temp");
             _updaterExePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
-            // La versione dell'updater viene letta dall'assembly invece che da una costante
-            _updaterVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
 
             // icona personalizzata: app.ico accanto all'exe, se presente
             AppIcon.TryOverride(this, _baseDir);
