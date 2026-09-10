@@ -120,10 +120,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <!-- Pacchetti lingua: copiati accanto all'exe, aggiungibili senza ricompilare -->
-    <Content Include="Languages\*.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <!-- Pacchetti lingua incorporati nell'exe (l'app resta un file singolo).
+         Eventuali file Languages\ accanto all'exe hanno precedenza: si può
+         cambiare o aggiungere una lingua anche senza ricompilare. -->
+    <Resource Include="Languages\*.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

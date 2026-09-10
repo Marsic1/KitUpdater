@@ -4,13 +4,18 @@
        fare pull delle novità senza conflitti e senza fork.
 
        Anche le icone non servono questo file — basta mettere "icon.custom.ico"
-       accanto al csproj dell'updater o nella radice per l'editor, e
-       "logo.custom.png" accanto al csproj dell'updater per il logo in alto a
-       destra della finestra. Anche quelli sono ignorati da git. -->
+       nella radice del repository (vale per entrambi gli exe) e
+       "logo.custom.png" nella radice per il logo in alto a destra della
+       finestra dell'updater. Anche quelli sono ignorati da git. -->
   <PropertyGroup>
     <!-- Nome del brand: titolo delle finestre e proprietà del prodotto
          (default: KitUpdater) -->
     <BrandName>KitUpdater</BrandName>
+
+    <!-- URL del manifest incorporato nell'exe dell'updater: così resta un
+         singolo file autonomo, senza bisogno di updater.config.json accanto.
+         (Il file updater.config.json, se presente, ha comunque la precedenza.) -->
+    <ManifestUrl>https://files.example.com/index.php/raw/YourShare/manifest.json</ManifestUrl>
 
     <!-- Nome dell'exe dell'updater (default: KitUpdater) -->
     <AssemblyName Condition="'$(MSBuildProjectName)' == 'KitUpdater'">KitUpdater</AssemblyName>

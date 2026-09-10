@@ -80,11 +80,14 @@ Notable details:
 
 1. Grab the [latest release](../../releases) (or build from source — see below). The zip contains an `updater` and an `editor` folder.
 2. Put the updater exe into your tools folder.
-3. Create `updater.config.json` next to it (see `updater.config.json.example`):
+3. Point it at your manifest — either way works:
+   - **No build**: create `updater.config.json` next to the exe (see `updater.config.json.example`):
 
-```json
-{ "manifest_url": "https://your-cloud/index.php/raw/YourShare/manifest.json" }
-```
+     ```json
+     { "manifest_url": "https://your-cloud/index.php/raw/YourShare/manifest.json" }
+     ```
+
+   - **Your own build**: set `ManifestUrl` in your `Directory.Build.props` (see Customization below) and the URL is compiled into the exe — a fully self-contained single file.
 
 4. In the editor, open Settings and fill in your Nextcloud/WebDAV details (server, username, **app password**, remote path, public share URL). Create your components, hit **Upload to WebDAV**, and put the download links in the manifest.
 5. Distribute the updater exe to your users — from now on they always get the latest versions with one click.
@@ -110,7 +113,7 @@ Want the updater to be *yours* — your name, your icon, your logo? No coding, n
    |---|---|
    | `icon.custom.ico` | The icon of both exes (a standard `.ico` file — your exe files will show this icon in Explorer and the taskbar) |
    | `logo.custom.png` | The picture in the top-right corner of the updater window |
-   | `Directory.Build.props` | The names — copy the ready-made `Directory.Build.props.example` from the repo, rename it to `Directory.Build.props`, then edit the three values inside: `BrandName` (shown in window titles, e.g. `YourName Updater`) and the two `AssemblyName` lines (the exe file names, e.g. `YourUpdater.exe`) |
+   | `Directory.Build.props` | The names and your manifest URL — copy the ready-made `Directory.Build.props.example` from the repo, rename it to `Directory.Build.props`, then edit the values inside: `BrandName` (shown in window titles, e.g. `YourName Updater`), the two `AssemblyName` lines (the exe file names, e.g. `YourUpdater.exe`) and `ManifestUrl` (your manifest's link, compiled into the exe so it stays a single self-contained file) |
 
 3. **Build it**:
 
@@ -130,13 +133,13 @@ That's it. If you skip step 2 entirely you simply get the stock `KitUpdater.exe`
 |---|---|
 | `icon.custom.ico` | Compiled into both exes as their icon, replacing the default |
 | `logo.custom.png` | The logo in the top-right of the updater window |
-| `Directory.Build.props` (see `Directory.Build.props.example`) | Exe names (`KitUpdater.exe` → `YourUpdater.exe`) and the brand name shown in window titles and product info (`BrandName`) |
+| `Directory.Build.props` (see `Directory.Build.props.example`) | Exe names (`KitUpdater.exe` → `YourUpdater.exe`), the brand name shown in window titles and product info (`BrandName`), and the manifest URL compiled into the updater (`ManifestUrl`) |
 
 All three are git-ignored: keep them in your working copy, pull upstream improvements, rebuild — your branding reapplies automatically.
 
 ### Languages
 
-Italian is the built-in language; additional languages are JSON packs in a `Languages\` folder next to the exe:
+Italian is the built-in language; additional languages are JSON packs. Packs placed in the source `Languages\` folder are **compiled into the exe** (the app stays a single self-contained file), and any `Languages\` folder next to the exe takes precedence — so you can add or change languages at runtime without recompiling:
 
 ```
 Languages/
@@ -151,7 +154,7 @@ Each pack maps the exact Italian string to a translation (any missing key simply
 { "Aggiorna Tutto": "Update All" }
 ```
 
-Language selection order: the `language` field in `updater.config.json` (updater) / `manifesteditor.config.json` (editor, also settable in the editor's Settings dialog) → the Windows display language → Italian. Both apps ship with `en.json`; new packs can be added at any time without recompiling.
+Language selection order: the `language` field in `updater.config.json` (updater) / `manifesteditor.config.json` (editor, also settable in the editor's Settings dialog) → the Windows display language → Italian. Both apps embed their `en.json` pack; new packs can be added next to the exe at any time without recompiling.
 
 > A runtime icon override also exists — an `app.ico` next to the exe switches window/taskbar icons without rebuilding — useful if you deploy the stock build but want your icon. For a fully branded exe, use the build-time files above.
 

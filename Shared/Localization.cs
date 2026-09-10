@@ -16,10 +16,14 @@ namespace KitUpdater.Shared
     // è un file Languages\<lingua>.json (es. en.json) che mappa la stringa
     // italiana esatta -> traduzione; le stringhe assenti restano in italiano.
     //
+    // I pacchetti compilati nel progetto (cartella Languages\ del sorgente)
+    // vengono incorporati NELL'EXE come risorse: le app restano un singolo
+    // file autonomo. Eventuali file Languages\ accanto all'exe hanno
+    // precedenza, così si può cambiare lingua (o aggiungerne una) anche
+    // senza ricompilare.
+    //
     // Lingua scelta all'avvio: campo "language" del file di configurazione
     // dell'app, altrimenti la lingua di Windows, altrimenti italiano.
-    // Nuovi file di lingua possono essere aggiunti accanto all'exe senza
-    // ricompilare nulla.
     public static class L10n
     {
         private static Dictionary<string, string> _map;
@@ -34,23 +38,27 @@ namespace KitUpdater.Shared
                 string lang = PickLanguage(baseDir, preferredLanguage);
                 Language = lang;
 
-                string file = Path.Combine(baseDir, "Languages", lang + ".json");
-                if (lang != "it" && File.Exists(file))
+                if (lang == "it")
                 {
-                    var parsed = JObject.Parse(File.ReadAllText(file));
-                    var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                    foreach (var prop in parsed.Properties())
-                    {
-                        string value = (string)prop.Value;
-                        if (!string.IsNullOrEmpty(value))
-                            dict[prop.Name] = value;
-                    }
-                    _map = dict;
+                    _map = null; // italiano incorporato: nessun pacchetto
+                    return;
                 }
-                else
+
+                string json = LoadPackFromDisk(baseDir, lang) ?? LoadEmbeddedPack(lang);
+                if (json == null)
                 {
                     _map = null;
+                    return;
                 }
+                var parsed = JObject.Parse(json);
+                var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var prop in parsed.Properties())
+                {
+                    string value = (string)prop.Value;
+                    if (!string.IsNullOrEmpty(value))
+                        dict[prop.Name] = value;
+                }
+                _map = dict;
             }
             catch
             {
@@ -64,11 +72,41 @@ namespace KitUpdater.Shared
             {
                 string p = preferred.Trim();
                 if (p == "it") return "it"; // forzato esplicitamente
-                if (File.Exists(Path.Combine(baseDir, "Languages", p + ".json"))) return p;
+                if (PackAvailable(baseDir, p)) return p;
             }
             string os = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            if (File.Exists(Path.Combine(baseDir, "Languages", os + ".json"))) return os;
+            if (PackAvailable(baseDir, os)) return os;
             return "it";
+        }
+
+        private static bool PackAvailable(string baseDir, string lang)
+        {
+            if (File.Exists(Path.Combine(baseDir, "Languages", lang + ".json"))) return true;
+            return LoadEmbeddedPack(lang) != null;
+        }
+
+        /// <summary>Pacchetto accanto all'exe (precedenza: personalizzazione runtime).</summary>
+        private static string LoadPackFromDisk(string baseDir, string lang)
+        {
+            string file = Path.Combine(baseDir, "Languages", lang + ".json");
+            return File.Exists(file) ? File.ReadAllText(file) : null;
+        }
+
+        /// <summary>Pacchetto incorporato nell'exe come risorsa in fase di build.</summary>
+        private static string LoadEmbeddedPack(string lang)
+        {
+            try
+            {
+                var uri = new Uri("pack://application:,,,/Languages/" + lang + ".json");
+                var resource = Application.GetResourceStream(uri);
+                if (resource == null) return null;
+                using (var reader = new StreamReader(resource.Stream))
+                    return reader.ReadToEnd();
+            }
+            catch
+            {
+                return null; // risorsa non incorporata
+            }
         }
 
         /// <summary>Traduce una stringa italiana; senza pacchetto la restituisce invariata.</summary>

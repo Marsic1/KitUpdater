@@ -30,10 +30,9 @@ namespace KitUpdater
         private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
         // ---------------------------------------------------------
 
-        // URL del manifest usato se updater.config.json non specifica "manifest_url".
-        // Placeholder per lo skeleton pubblico: chi compila per sé configura il
-        // proprio URL in updater.config.json accanto all'exe (vedi l'.example).
-        private const string DefaultManifestUrl = "https://files.example.com/index.php/raw/YourShare/manifest.json";
+        // URL del manifest di default: incorporato in fase di build dalla
+        // proprietà ManifestUrl (Directory.Build.props del builder). Il file
+        // updater.config.json accanto all'exe, se presente, ha la precedenza.
 
         private readonly string _baseDir = AppDomain.CurrentDomain.BaseDirectory;
         private readonly string _localManifestPath;
@@ -41,7 +40,7 @@ namespace KitUpdater
         private readonly string _updaterExePath;
         private readonly string _updaterVersion;
 
-        private string _remoteManifestUrl = DefaultManifestUrl;
+        private string _remoteManifestUrl = Branding.DefaultManifestUrl;
 
         private readonly HttpClient _httpClient = new HttpClient();
 

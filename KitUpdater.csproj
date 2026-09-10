@@ -13,6 +13,10 @@
     <AssemblyName Condition="'$(AssemblyName)' == ''">KitUpdater</AssemblyName>
     <!-- Nome del brand mostrato nel titolo della finestra (Directory.Build.props) -->
     <BrandName Condition="'$(BrandName)' == ''">KitUpdater</BrandName>
+    <!-- URL del manifest incorporato nell'exe (Directory.Build.props): lo
+         rende autonomo senza updater.config.json accanto. Il file di config
+         runtime, se presente, ha comunque la precedenza. -->
+    <ManifestUrl Condition="'$(ManifestUrl)' == ''">https://files.example.com/index.php/raw/YourShare/manifest.json</ManifestUrl>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -142,10 +146,10 @@
     <Resource Include="logo.custom.png" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Pacchetti lingua: copiati accanto all'exe, aggiungibili senza ricompilare -->
-    <Content Include="Languages\*.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <!-- Pacchetti lingua incorporati nell'exe (l'app resta un file singolo).
+         Eventuali file Languages\ accanto all'exe hanno precedenza: si può
+         cambiare o aggiungere una lingua anche senza ricompilare. -->
+    <Resource Include="Languages\*.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Branding del builder: Branding.g.cs espone Branding.Name (titolo della
@@ -158,6 +162,7 @@
     <BrandingLines Include="    public static class Branding" />
     <BrandingLines Include="    {" />
     <BrandingLines Include="        public const string Name = &quot;$(BrandName)&quot;%3B" />
+    <BrandingLines Include="        public const string DefaultManifestUrl = &quot;$(ManifestUrl)&quot;%3B" />
     <BrandingLines Include="    }" />
     <BrandingLines Include="}" />
   </ItemGroup>
