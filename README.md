@@ -37,7 +37,7 @@ Notable details:
 - Add / remove / duplicate **components and extras** with a form UI — no hand-written JSON.
 - **Download the live manifest** from your public URL or straight from WebDAV, edit it, and **upload it back with one click** — the manifest on your Nextcloud is always current, no file juggling.
 - Full **validation before saving or uploading**: unique keys, valid versions and URLs, safe folder paths, consistent actions.
-- Your Nextcloud credentials are stored encrypted (DPAPI, per-Windows-user) and never leave your machine in plain text.
+- Your Nextcloud credentials are stored encrypted (DPAPI, per-Windows-user) and never leave your machine in plain text. The settings are kept next to the editor exe and backed up automatically to `%APPDATA%\KitUpdater`, so they survive rebuilds and folder cleanups.
 
 ## Manifest format
 
@@ -121,7 +121,7 @@ Want the updater to be *yours* — your name, your icon, your logo? No coding, n
    msbuild KitUpdater.slnx -p:Configuration=Release
    ```
 
-   Your branded exes appear in `bin\Release\` and `KitUpdaterEditor\bin\Release\`.
+   Your branded exes appear in `src\KitUpdater\bin\Release\` (updater) and `src\KitUpdaterEditor\bin\Release\` (editor).
 
 4. **Later, when this project gets updates**: just `git pull` and build again — your custom files are never touched, your branding reappears automatically. Delete a custom file anytime to go back to the stock look.
 
