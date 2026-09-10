@@ -160,6 +160,8 @@ Language selection order: the `language` field in `updater.config.json` (updater
 
 ## Building
 
+Repository layout: `src/KitUpdater` (updater), `src/KitUpdaterEditor` (editor), `src/Shared` (common code), `docs/` (screenshots) — the solution `KitUpdater.slnx` and the `packages/` folder stay at the root.
+
 Visual Studio 2022+ with the .NET Framework 4.8 developer pack, or:
 
 ```

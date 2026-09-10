@@ -1,13 +1,16 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace KitUpdaterEditor
 {
-    // Configurazione del ManifestEditor salvata accanto all'exe.
+    // Configurazione del ManifestEditor: copia locale accanto all'exe (uso
+    // portabile) + backup automatico in %APPDATA%\KitUpdater, così le
+    // impostazioni sopravvivono a pulizie di bin\ e rebuild.
     // La password dell'app Nextcloud viene cifrata con DPAPI (CurrentUser):
     // non compare in chiaro su disco e resta leggibile solo dallo stesso utente.
     public class EditorConfig
@@ -26,6 +29,12 @@ namespace KitUpdaterEditor
         private const string ConfigFileName = "manifesteditor.config.json";
         private static readonly string ConfigPath =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigFileName);
+
+        // Backup in %APPDATA%: sopravvive a cancellazioni della cartella bin
+        private static string BackupPath =>
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "KitUpdater", ConfigFileName);
 
         [JsonIgnore]
         public string Password
@@ -61,14 +70,19 @@ namespace KitUpdaterEditor
 
         public static EditorConfig Load()
         {
-            try
+            // prima la copia locale (portabile), poi il backup in %APPDATA%:
+            // così le impostazioni sopravvivono anche a pulizie di bin\ e rebuild
+            foreach (string path in ConfigPaths())
             {
-                if (File.Exists(ConfigPath))
+                try
                 {
-                    return JsonConvert.DeserializeObject<EditorConfig>(File.ReadAllText(ConfigPath)) ?? new EditorConfig();
+                    if (File.Exists(path))
+                    {
+                        return JsonConvert.DeserializeObject<EditorConfig>(File.ReadAllText(path)) ?? new EditorConfig();
+                    }
                 }
+                catch { /* configurazione non leggibile: prova il prossimo percorso */ }
             }
-            catch { /* configurazione non leggibile: usa i default */ }
             return new EditorConfig();
         }
 
@@ -79,23 +93,41 @@ namespace KitUpdaterEditor
         /// </summary>
         public static string ReadLanguage(string baseDir)
         {
-            try
+            foreach (string path in new[] { Path.Combine(baseDir, ConfigFileName), BackupPath })
             {
-                string path = Path.Combine(baseDir, ConfigFileName);
-                if (File.Exists(path))
+                try
                 {
-                    var parsed = JObject.Parse(File.ReadAllText(path));
-                    string lang = (string)parsed["language"];
-                    return string.IsNullOrWhiteSpace(lang) ? null : lang.Trim();
+                    if (File.Exists(path))
+                    {
+                        var parsed = JObject.Parse(File.ReadAllText(path));
+                        string lang = (string)parsed["language"];
+                        return string.IsNullOrWhiteSpace(lang) ? null : lang.Trim();
+                    }
                 }
+                catch { /* config illeggibile: lingua automatica */ }
             }
-            catch { /* config illeggibile: lingua automatica */ }
             return null;
         }
 
         public void Save()
         {
-            File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(this, Formatting.Indented));
+            string json = JsonConvert.SerializeObject(this, Formatting.Indented);
+            // copia locale accanto all'exe (portabile) + backup in %APPDATA%
+            try { File.WriteAllText(ConfigPath, json); }
+            catch { /* cartella non scrivibile: resta almeno il backup */ }
+            try
+            {
+                string dir = Path.GetDirectoryName(BackupPath);
+                if (dir.Length > 0) Directory.CreateDirectory(dir);
+                File.WriteAllText(BackupPath, json);
+            }
+            catch { /* backup non scrivibile: basta la copia locale */ }
+        }
+
+        private static IEnumerable<string> ConfigPaths()
+        {
+            yield return ConfigPath;
+            yield return BackupPath;
         }
     }
 }

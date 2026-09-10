@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\Costura.Fody.6.2.0\build\Costura.Fody.props" Condition="Exists('packages\Costura.Fody.6.2.0\build\Costura.Fody.props')" />
+  <Import Project="..\..\packages\Costura.Fody.6.2.0\build\Costura.Fody.props" Condition="Exists('..\..\packages\Costura.Fody.6.2.0\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -52,15 +52,15 @@
   </PropertyGroup>
   <!-- Branding del builder: icona personalizzata compilata dentro l'exe.
        Il file non è tracciato da git, quindi git pull resta sempre pulito. -->
-  <PropertyGroup Condition="Exists('icon.custom.ico')">
-    <ApplicationIcon>icon.custom.ico</ApplicationIcon>
+  <PropertyGroup Condition="Exists('..\..\icon.custom.ico')">
+    <ApplicationIcon>..\..\icon.custom.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=6.2.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
-      <HintPath>packages\Costura.Fody.6.2.0\lib\netstandard2.0\Costura.dll</HintPath>
+      <HintPath>..\..\packages\Costura.Fody.6.2.0\lib\netstandard2.0\Costura.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -84,8 +84,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Shared\ManifestModels.cs" />
-    <Compile Include="Shared\Localization.cs" />
+    <Compile Include="..\Shared\ManifestModels.cs" />
+    <Compile Include="..\Shared\Localization.cs" />
     <!-- Classe Branding generata a ogni build dalla proprietà BrandName:
          vedi il target GenerateBranding più in basso -->
     <Compile Include="$(BaseIntermediateOutputPath)Branding.g.cs" />
@@ -142,8 +142,8 @@
   </ItemGroup>
   <!-- Logo del builder: se logo.custom.png esiste viene incorporato come
        risorsa e usato dalla finestra principale al posto di cat.png. -->
-  <ItemGroup Condition="Exists('logo.custom.png')">
-    <Resource Include="logo.custom.png" />
+  <ItemGroup Condition="Exists('..\..\logo.custom.png')">
+    <Resource Include="..\..\logo.custom.png" />
   </ItemGroup>
   <ItemGroup>
     <!-- Pacchetti lingua incorporati nell'exe (l'app resta un file singolo).
@@ -169,14 +169,14 @@
   <Target Name="GenerateBranding" BeforeTargets="BeforeBuild">
     <WriteLinesToFile File="$(BaseIntermediateOutputPath)Branding.g.cs" Lines="@(BrandingLines)" Overwrite="true" />
   </Target>
-  <Import Project="packages\Fody.6.9.3\build\Fody.targets" Condition="Exists('packages\Fody.6.9.3\build\Fody.targets')" />
+  <Import Project="..\..\packages\Fody.6.9.3\build\Fody.targets" Condition="Exists('..\..\packages\Fody.6.9.3\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Questo progetto fa riferimento a uno o più pacchetti NuGet che non sono presenti in questo computer. Usare lo strumento di ripristino dei pacchetti NuGet per scaricarli. Per altre informazioni, vedere http://go.microsoft.com/fwlink/?LinkID=322105. Il file mancante è {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Fody.6.9.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Fody.6.9.3\build\Fody.targets'))" />
-    <Error Condition="!Exists('packages\Costura.Fody.6.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.6.2.0\build\Costura.Fody.props'))" />
-    <Error Condition="!Exists('packages\Costura.Fody.6.2.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.6.2.0\build\Costura.Fody.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Fody.6.9.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Fody.6.9.3\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Costura.Fody.6.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Costura.Fody.6.2.0\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\..\packages\Costura.Fody.6.2.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Costura.Fody.6.2.0\build\Costura.Fody.targets'))" />
   </Target>
-  <Import Project="packages\Costura.Fody.6.2.0\build\Costura.Fody.targets" Condition="Exists('packages\Costura.Fody.6.2.0\build\Costura.Fody.targets')" />
+  <Import Project="..\..\packages\Costura.Fody.6.2.0\build\Costura.Fody.targets" Condition="Exists('..\..\packages\Costura.Fody.6.2.0\build\Costura.Fody.targets')" />
 </Project>
