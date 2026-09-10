@@ -68,6 +68,14 @@
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="#AAAAAA"/>
             <Setter Property="Margin" Value="0,6,0,2"/>
+        <!-- testo su piu' righe: le etichette lunghe non devono uscire dalla finestra -->
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
         </Style>
         <Style x:Key="FieldBox" TargetType="TextBox">
             <Setter Property="Background" Value="#0D0D0D"/>
