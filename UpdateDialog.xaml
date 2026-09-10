@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:KitUpdater.Shared"
-        Title="{l:Loc 'Aggiornamento Disponibile'}" Height="280" Width="450"
+        Title="{l:Loc 'Aggiornamento Disponibile'}" SizeToContent="Height" Width="450"
         WindowStartupLocation="CenterOwner" Background="#1E1E1E" Foreground="#E0E0E0"
         FontFamily="Segoe UI" ResizeMode="NoResize" Loaded="Window_Loaded">
 
