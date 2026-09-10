@@ -81,7 +81,7 @@
             <PasswordBox x:Name="TxtPassword" Style="{StaticResource PasswordFieldBox}"/>
             <Label Content="{l:Loc 'Percorso remoto del manifest (es. /MioKit/manifest.json)'}"/>
             <TextBox x:Name="TxtRemotePath" Style="{StaticResource FieldBox}"/>
-            <Label Content="{l:Loc 'URL pubblico del manifest (link della condivisione, per il download)'}"/>
+            <Label Content="{l:Loc 'URL pubblico del manifest (facoltativo — usato solo dal pulsante Scarica da URL, non dal WebDAV)'}"/>
             <TextBox x:Name="TxtPublicUrl" Style="{StaticResource FieldBox}"/>
         </StackPanel>
 

@@ -97,7 +97,7 @@
   "Nome utente": "Username",
   "Password dell'app (Nextcloud → Impostazioni → Sicurezza → Password dell'app)": "App password (Nextcloud → Settings → Security → App password)",
   "Percorso remoto del manifest (es. /MioKit/manifest.json)": "Remote manifest path (e.g. /MyKit/manifest.json)",
-  "URL pubblico del manifest (link della condivisione, per il download)": "Public manifest URL (share link, used for download)",
+  "URL pubblico del manifest (facoltativo — usato solo dal pulsante Scarica da URL, non dal WebDAV)": "Public manifest URL (optional — only used by the Download from URL button, not by WebDAV)",
   "Annulla": "Cancel",
   "Salva": "Save",
   "L'URL del server deve iniziare con http:// o https://": "The server URL must start with http:// or https://",
